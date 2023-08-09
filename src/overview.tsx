@@ -1,16 +1,18 @@
 // Overview.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/compat';
 import { useMemo } from "react";
 import { auth } from './firebaseConfig';
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { PassThrough } from 'stream';
 import { Loader } from "@googlemaps/js-api-loader"
 import './overview.css';
+import useGetUser from './getuser';
 
-const user = auth.currentUser;
-const name = user?.email?.split('@')[0];
+
 
 const Overview: React.FC = () => {
+  const name = useGetUser();
 
   // This will change based on who's project it is
   const myLatLong = { lat: 0.6509, lng: 111.53073 };

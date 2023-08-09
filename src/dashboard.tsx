@@ -1,14 +1,15 @@
 // Dashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './sidebar';
 import Overview from './overview';
 import Settings from './settings';
 import ModelViewerPage from './modelviewer';
 import SiteEvaluation from './siteeval';
-import { auth } from './firebaseConfig';
+//import { auth } from './firebaseConfig';
+import { getAuth, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-const user = auth.currentUser;
+const auth = getAuth();
 
 export enum DashboardSection {
   Overview = 'Overview',
@@ -20,11 +21,14 @@ export enum DashboardSection {
 
 const Dashboard: React.FC = () => {
   const [selectedSection, setSelectedSection] = useState<DashboardSection>(DashboardSection.Overview);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const nav = useNavigate();
 
   const handleSectionChange = (section: DashboardSection) => {
     setSelectedSection(section);
   };
+
+
   
   const renderContent = () => {
     switch (selectedSection) {

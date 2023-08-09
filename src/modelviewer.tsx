@@ -1,23 +1,30 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import Rock from './3Dmodelviewer';
 import { Canvas, useFrame } from '@react-three/fiber'
 import './modelviewer.css';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls, useProgress, Html } from '@react-three/drei';
 import { auth } from './firebaseConfig';
+import firebase from 'firebase/compat';
+import useGetUser from './getuser';
 
-const user = auth.currentUser;
-const name = user?.email?.split('@')[0];
+
+
+function Loader() {
+  const { active, progress, errors, item, loaded, total } = useProgress()
+  return <Html center className='loader' ></Html>
+}
 
 const ModelViewerPage: React.FC = () => {
+  const name = useGetUser()
   return (
     <div className="canvas">
       <h1> 3D Model Viewer </h1>
       <h1> {name}'s Project </h1>
-      <Canvas>
+      <Canvas className='model'>
         <ambientLight />
         <OrbitControls position={[5, 1, 5]} />
         <pointLight position={[10, 10, 10]} />
-        <React.Suspense fallback={null}>
+        <React.Suspense fallback={<Loader />}>
           <Rock />
         </React.Suspense>
     </Canvas>

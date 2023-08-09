@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { GeoTIFFImage, fromUrl } from "geotiff";
-
+//@ts-ignore
+import { GeoTIFFImage, ReadRasterResult, fromUrl } from "geotiff";
+import RasterDisplay from './displayRaster';
 
 type FrequencyData = {
     value: number;
@@ -35,10 +36,43 @@ function indToLegend(ind: number) {
             return "error";
     }
 }
+var namer = require('color-namer');
+
+function indToColor(ind: number) {
+    switch(ind){
+        case 0:
+            return namer('#09150a').html[0].name;
+        case 1:
+            return namer('#214c23').html[0].name;
+        case 2:
+            return namer('#38833c').html[0].name;
+        case 3:
+            return namer('#a6d9a8').html[0].name;
+        case 4:
+            return namer('#dfd0c0').html[0].name;
+        case 5:
+            return namer('#DAA06D').basic[0].name;
+        case 6:
+            return namer('#702963').basic[0].name;
+        case 7:
+            return namer('#0000FF').basic[0].name;
+        default:
+            return "error";
+    }
+}
 
 type TiffViewerProps = {
     windows: number[]
 }
+
+function polyToRect(window: number[]) {
+    const left = Math.min(window[0], window[2], window[4], window[6]);
+    const right = Math.max(window[0], window[2], window[4], window[6]);
+    const top = Math.min(window[1], window[3], window[5], window[7]);
+    const bottom = Math.max(window[1], window[3], window[5], window[7]);
+    return [left, top, right, bottom];
+}
+  
 
 const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     
@@ -50,15 +84,15 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
 
     async function getData(img: GeoTIFFImage, window: number[]) {
         // Add padding 
-        const left = Math.min(window[0], window[2], window[4], window[6]);
-        const right = Math.max(window[0], window[2], window[4], window[6]);
-        const top = Math.min(window[1], window[3], window[5], window[7]);
-        const bottom = Math.max(window[1], window[3], window[5], window[7]);
+        const rect = polyToRect(window);
+        console.log(window);
         // Get rasters
-        const data = await img.readRasters({ window: [left, top, right, bottom] });
+        const data = await img.readRasters({ window: rect });
         return data;
     }
     const [data, setData] = useState<FrequencyData | null>(null);
+    const [rasters, setRasters] = useState<ReadRasterResult | null>(null);
+    
 
     // Load our data tile from url, arraybuffer, or blob, so we can work with it:
     
@@ -68,9 +102,10 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     getTiff('./8_class_kmeans.tif').then(image => {
 
         const data = getData(image, props.windows);
-
+        
         data.then(result => {
             var rasters = result;
+            setRasters(rasters);
             if (Array.isArray(rasters)) {
                 rasters.forEach((band, index) => {
                     const frequencies: { [key: number]: number } = {};
@@ -85,7 +120,6 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
                         value: +value,
                         relativeFrequency: count / totalPixels,
                     }));
-                
                     console.log(`Relative Frequencies for Band ${index}:`, relativeFrequencies);
                     setData(relativeFrequencies);
                     });
@@ -98,11 +132,14 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     
     return (
         <div>
+        {rasters ? (
+            <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
+        ): (<div>Loading...</div>)}
         {data ? (
           <div>
             {data.map((item, index) => (
               <div key={index}>
-                Type: {indToLegend(item.value)}, Relative Frequency: {freqToPercentage(item.relativeFrequency)}%
+                Type: {indToLegend(item.value)} ({indToColor(item.value)}), Relative Frequency: {freqToPercentage(item.relativeFrequency)}%
               </div>
             ))}
           </div>

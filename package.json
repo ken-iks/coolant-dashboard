@@ -12,6 +12,7 @@
     "@types/node": "^16.18.39",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
+    "color-namer": "^1.4.0",
     "geoblaze": "^2.1.0",
     "geotiff": "^2.0.7",
     "plotty": "^0.4.9",

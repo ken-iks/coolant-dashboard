@@ -1,10 +1,14 @@
 // Sidebar.tsx
 import React from 'react';
 import { DashboardSection } from './dashboard';
-import { auth } from './firebaseConfig';
+import GetUser from './getuser';
+import { useState, useEffect } from 'react';
+import { getAuth, User } from 'firebase/auth';
+import { auth } from './firebaseConfig'
+import firebase from 'firebase/compat';
+import useGetUser from './getuser';
 
-const user = auth.currentUser;
-const name = user?.email?.split('@')[0];
+
 
 interface SidebarProps {
   selectedSection: DashboardSection;
@@ -14,6 +18,9 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ selectedSection, onSectionChange }) => {
   const sections = [DashboardSection.Overview, DashboardSection.ModelViewer, 
      DashboardSection.SiteEvaluation, DashboardSection.Settings];
+
+  const name = useGetUser();
+
   return (
     <div className="sidebar">
       <h2>{name}'s Dashboard</h2>

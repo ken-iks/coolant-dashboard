@@ -4,6 +4,7 @@ import './siteeval.css';
 import TiffViewer from "./tiffviewer";
 
 let pointsConverted: number[];
+  
 
 // HARD CODING VALUES FROM DESA PLOT FOR DEADLINE. WILL NEED TO AUTOMATE
 const bbox = [111.82264589331169, 0.14337111934547572, 112.029438071716, 0.3233935022830277] 
@@ -14,23 +15,23 @@ const bboxHeight = 0.180022382937552
 
 const addNewMap = (points: number[]) => {
     console.log(points)
+
+    var xpoints: number[] = [points[0], points[2], points[4], points[6]];
+    var ypoints: number[] = [points[1], points[3], points[5], points[7]];
+
+    const pointsString = Array.from({ length: points.length / 2 }, (_, i) => {
+        return `${points[2 * i]},${points[2 * i + 1]}`;
+      }).join(' ');
+
+    console.log(pointsString);
+
+    console.log(points.join(' '));
+
     // Validation
-    if (points[0] < bbox[0] ||
-        points[0] > bbox[2] ||
-        points[1] < bbox[1] ||
-        points[1] > bbox[3] ||
-        points[2] < bbox[0] ||
-        points[2] > bbox[2] ||
-        points[3] < bbox[1] ||
-        points[3] > bbox[3] ||
-        points[4] < bbox[0] ||
-        points[4] > bbox[2] ||
-        points[5] < bbox[1] ||
-        points[5] > bbox[3] ||
-        points[6] < bbox[0] ||
-        points[6] > bbox[2] ||
-        points[7] < bbox[1] ||
-        points[7] > bbox[3] || points.some((num) => isNaN(num))
+    if (points.some((num) => num < 0) || 
+        points.some((num) => isNaN(num)) ||
+        xpoints.some((num) => num > pixelWidth) || 
+        ypoints.some((num) => num > pixelHeight)
         ) {
             return (
                 <h1> Invalid points. Try again </h1>
@@ -39,6 +40,7 @@ const addNewMap = (points: number[]) => {
     else {
     return (
         <div>
+
         <h1> Here is the breakdown for your section of the Desa Plot </h1>
         <TiffViewer windows={points} />
         </div>
@@ -109,11 +111,11 @@ const DisplayForm: React.FC = () => {
 
     return (
         <div>
+        <button onClick={handleReset}>Reset</button> {/* Reset button */}
+        {formSubmitted && (addNewMap(points))}
+        {!formSubmitted && <div>
         <h1> Here is a full image of the Desa Plot </h1>
         <img src="./8_class_kmeans_ar.png" alt="Desa Plot" className='fullimg'></img>
-        <button onClick={handleReset}>Reset</button> {/* Reset button */}
-        {formSubmitted && addNewMap(points)}
-        {!formSubmitted && <div>
         <div> To get specific details about a section of the plot, input the longitude and latitude of the 4 corners of the
             polygon you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </div>
         <form onSubmit={handleSubmit}>

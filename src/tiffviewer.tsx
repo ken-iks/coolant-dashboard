@@ -43,17 +43,17 @@ function indToColor(ind: number) {
         case 0:
             return namer('#09150a').html[0].name;
         case 1:
-            return namer('#214c23').html[0].name;
+            return namer('#702963').basic[0].name;
         case 2:
-            return namer('#38833c').html[0].name;
-        case 3:
-            return namer('#a6d9a8').html[0].name;
-        case 4:
             return namer('#dfd0c0').html[0].name;
+        case 3:
+            return namer('#38833C').html[0].name;
+        case 4:
+            return namer('#214C23').html[0].name;
         case 5:
             return namer('#DAA06D').basic[0].name;
         case 6:
-            return namer('#702963').basic[0].name;
+            return namer('#A6D9A8').basic[0].name;
         case 7:
             return namer('#0000FF').basic[0].name;
         default:
@@ -70,8 +70,10 @@ function polyToRect(window: number[]) {
     const right = Math.max(window[0], window[2], window[4], window[6]);
     const top = Math.min(window[1], window[3], window[5], window[7]);
     const bottom = Math.max(window[1], window[3], window[5], window[7]);
+    console.log(left, top, right, bottom)
     return [left, top, right, bottom];
 }
+
   
 
 const TiffViewer: React.FC<TiffViewerProps> = (props) => {
@@ -87,11 +89,15 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
         const rect = polyToRect(window);
         console.log(window);
         // Get rasters
+        const sidedata = await img.readRasters();
+        setFullRaster(sidedata);
         const data = await img.readRasters({ window: rect });
         return data;
     }
     const [data, setData] = useState<FrequencyData | null>(null);
     const [rasters, setRasters] = useState<ReadRasterResult | null>(null);
+    const [fullImg, setFullImg] = useState<GeoTIFFImage | null>(null);
+    const [fullRaster, setFullRaster] = useState<ReadRasterResult | null>(null);
     
 
     // Load our data tile from url, arraybuffer, or blob, so we can work with it:
@@ -99,12 +105,16 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     const canvasRef = useRef(null);
     
     useEffect(()=>{
-    getTiff('./8_class_kmeans.tif').then(image => {
-
+    getTiff('./8_class_kmeans_v2.tif').then(image => {
+        console.log(image.getWidth());
+        console.log(image.getHeight());
+        console.log(image.getBoundingBox());
+        setFullImg(image);
         const data = getData(image, props.windows);
         
         data.then(result => {
             var rasters = result;
+            console.log(rasters);
             setRasters(rasters);
             if (Array.isArray(rasters)) {
                 rasters.forEach((band, index) => {
@@ -132,9 +142,18 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     
     return (
         <div>
+            <div className='image-results'>
+          {(fullRaster && fullImg) ? (
+            <div> Full Image 
+            <RasterDisplay raster={fullRaster} image={[0,0,fullImg.getWidth(),fullImg.getHeight()]} />
+            </div>
+        ): (<div>Generating full image...</div>)}
         {rasters ? (
+            <div> Cropped Image
             <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
-        ): (<div>Loading...</div>)}
+            </div>
+        ): (<div>Generating crop image...</div>)}
+            </div>
         {data ? (
           <div>
             {data.map((item, index) => (
@@ -144,7 +163,7 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
             ))}
           </div>
         ) : (
-          <div>Loading...</div>
+          <div>Generating crop data...</div>
         )}
       </div>
     )

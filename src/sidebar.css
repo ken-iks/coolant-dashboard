@@ -1,0 +1,14 @@
+.logo {
+    width: 50px;
+    height: auto;
+    display:block;
+    margin:auto;
+}
+
+.extra-words-on-sidebar {
+    text-align: center;
+}
+
+.sidebar-options {
+    vertical-align: bottom;
+}

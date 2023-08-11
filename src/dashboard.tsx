@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './sidebar';
 import Overview from './overview';
-import Settings from './settings';
 import ModelViewerPage from './modelviewer';
 import SiteEvaluation from './siteeval';
 //import { auth } from './firebaseConfig';
 import { getAuth, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import './dashboard.css';
+
 
 const auth = getAuth();
 
@@ -15,7 +16,6 @@ export enum DashboardSection {
   Overview = 'Overview',
   ModelViewer = '3D Model Viewer',
   SiteEvaluation = 'Site Evaluator',
-  Settings = 'Settings',
   TiffViewer = 'Tiff Viewer'
 }
 
@@ -38,8 +38,6 @@ const Dashboard: React.FC = () => {
         return <ModelViewerPage />;
       case DashboardSection.SiteEvaluation:
         return <SiteEvaluation />;
-      case DashboardSection.Settings:
-        return <Settings />;
       default:
         return null;
     }
@@ -58,14 +56,15 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       <div className="dashboard-container">
+        <div className='sidebar'>
         <Sidebar selectedSection={selectedSection} onSectionChange={handleSectionChange} />
+        </div>
         <div className="main-content">
           {renderContent()}
           <button className="sign-out-button" onClick={handleSignOut}>
             Sign Out
           </button>
           </div>
-
       </div>
     </div>
   );

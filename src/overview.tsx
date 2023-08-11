@@ -12,7 +12,8 @@ import useGetUser from './getuser';
 
 
 const Overview: React.FC = () => {
-  const name = useGetUser();
+  const nam = useGetUser();
+  const name = nam.charAt(0).toUpperCase() + nam.slice(1);
 
   // This will change based on who's project it is
   const myLatLong = { lat: 0.6509, lng: 111.53073 };
@@ -30,9 +31,7 @@ const Overview: React.FC = () => {
           map.setZoom(14);
           infowindow.setContent('This project is located at: ' + response.results[0].formatted_address
           + '. Set in the beautiful rollings hills of Indonesia Borneo, Merakai is an idyllic portion of '
-          + 'rainforest that has faced increasing pressures from palm oil, rubber plantains, and selective local timber harvesting. '+
-          'The indigenous Dayak peoples have lived in the region of Merakai since an estimated 15th Century. '+
-          'They are your stewards of the rainforest and experts in all matters of restoration.');
+          + 'rainforest that has faced increasing pressures from palm oil, rubber plantains, and selective local timber harvesting.');
           infowindow.open(map, marker);
         } else {
           window.alert("No results found");

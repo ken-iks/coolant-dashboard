@@ -15,7 +15,8 @@ function Loader() {
 }
 
 const ModelViewerPage: React.FC = () => {
-  const name = useGetUser()
+  const nam = useGetUser();
+  const name = nam.charAt(0).toUpperCase() + nam.slice(1);
   return (
     <div className="canvas">
       <h1> 3D Model Viewer </h1>

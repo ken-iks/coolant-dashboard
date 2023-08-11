@@ -61,9 +61,6 @@ const LoginPage: React.FC = () => {
           Login
           </button>
         </div>
-        <button type="submit" onClick={handleSignUp}>
-          Sign Up
-        </button>
       </div>
     </div>
   );
@@ -73,7 +70,14 @@ export default LoginPage;
 
 
 /* 
+All accounts need to be name@coolant.earth
+
 Test login
 Email: pilot@coolant.earth
 Pword: Pilot@123
+
+Add this to Login if you want to sign up another user
+<button type="submit" onClick={handleSignUp} disabled>
+  Sign Up
+</button>
 */

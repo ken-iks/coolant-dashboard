@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './siteeval.css';
 import TiffViewer from "./tiffviewer";
+import './displayForm.css';
+import './displayRaster.css';
 
 let pointsConverted: number[];
   
@@ -27,7 +29,7 @@ const addNewMap = (points: number[]) => {
 
     console.log(points.join(' '));
 
-    // Validation
+    // Validation 
     if (points.some((num) => num < 0) || 
         points.some((num) => isNaN(num)) ||
         xpoints.some((num) => num > pixelWidth) || 
@@ -37,10 +39,9 @@ const addNewMap = (points: number[]) => {
                 <h1> Invalid points. Try again </h1>
             )
         }
-    else {
+    else { 
     return (
         <div>
-
         <h1> Here is the breakdown for your section of the Desa Plot </h1>
         <TiffViewer windows={points} />
         </div>
@@ -110,15 +111,16 @@ const DisplayForm: React.FC = () => {
 
 
     return (
-        <div>
-        <button onClick={handleReset}>Reset</button> {/* Reset button */}
+        <div>  
         {formSubmitted && (addNewMap(points))}
         {!formSubmitted && <div>
+        <div className="plot">
         <h1> Here is a full image of the Desa Plot </h1>
         <img src="./8_class_kmeans_ar.png" alt="Desa Plot" className='fullimg'></img>
-        <div> To get specific details about a section of the plot, input the longitude and latitude of the 4 corners of the
-            polygon you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </div>
-        <form onSubmit={handleSubmit}>
+        <p> To get specific details about a section of the plot, input the longitude and latitude of the 4 corners of the
+            polygon you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </p> 
+        </div>
+        <form onSubmit={handleSubmit} className="inputs">
             <label>
             Point 1:
             <input
@@ -161,6 +163,7 @@ const DisplayForm: React.FC = () => {
             <br />
             <button type="submit">Submit</button>
         </form> </div>}
+        <button onClick={handleReset}>Reset</button> {/* Reset button */}
         </div>
     )
 }

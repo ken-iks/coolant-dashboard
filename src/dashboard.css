@@ -1,0 +1,5 @@
+.dashboard-container {
+    display: flex;
+    align-items: stretch;
+    height:max-content;
+}

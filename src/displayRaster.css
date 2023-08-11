@@ -1,0 +1,8 @@
+.rasterview {
+    width: 100%; 
+    height: auto;  
+}
+
+.image-results {
+    display: flex;
+}

@@ -15,6 +15,7 @@
     "color-namer": "^1.4.0",
     "geoblaze": "^2.1.0",
     "geotiff": "^2.0.7",
+    "mdb-react-ui-kit": "^6.2.0",
     "plotty": "^0.4.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

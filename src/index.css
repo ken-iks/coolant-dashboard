@@ -4,6 +4,7 @@ body {
   padding: 0;
   font-family: sans-serif;
   background-color: #f1f1f1;
+  height: 100%;
 }
 
 .dashboard-container {
@@ -15,6 +16,7 @@ body {
 
 .main {
   font-family: sans-serif;
+  padding: 0px;
 }
 
 .sidebar {
@@ -52,7 +54,6 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 24px;
   background-color: #fff;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;

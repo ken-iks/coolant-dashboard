@@ -13,7 +13,7 @@ import './dashboard.css';
 const auth = getAuth();
 
 export enum DashboardSection {
-  Overview = 'Overview',
+  Overview = 'Project Details',
   ModelViewer = '3D Model Viewer',
   SiteEvaluation = 'Site Evaluator',
   TiffViewer = 'Tiff Viewer'

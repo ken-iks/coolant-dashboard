@@ -7,6 +7,10 @@ import { auth } from './firebaseConfig';
 import firebase from 'firebase/compat';
 import useGetUser from './getuser';
 
+/*
+If you want to add LumaLabs:
+<iframe src="https://lumalabs.ai/embed/466679ca-f710-48a5-bf70-02110de2506c?mode=slf&background=%23ffffff&color=%23000000&showTitle=false&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false" width="300" height="200" frameBorder="0" title="luma embed"></iframe>
+*/
 
 
 function Loader() {

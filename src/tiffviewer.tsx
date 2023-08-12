@@ -43,7 +43,7 @@ function indToColor(ind: number) {
         case 0:
             return namer('#09150a').html[0].name;
         case 1:
-            return namer('#702963').basic[0].name;
+            return namer('#702963').html[0].name;
         case 2:
             return namer('#dfd0c0').html[0].name;
         case 3:
@@ -51,11 +51,11 @@ function indToColor(ind: number) {
         case 4:
             return namer('#214C23').html[0].name;
         case 5:
-            return namer('#DAA06D').basic[0].name;
+            return namer('#DAA06D').html[0].name;
         case 6:
-            return namer('#A6D9A8').basic[0].name;
+            return namer('#A6D9A8').html[0].name;
         case 7:
-            return namer('#0000FF').basic[0].name;
+            return namer('#0000FF').html[0].name;
         default:
             return "error";
     }
@@ -144,21 +144,21 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
         <div>
             <div className='image-results'>
           {(fullRaster && fullImg) ? (
-            <div> Full Image 
+            <div> <h3>Full Image</h3>
             <RasterDisplay raster={fullRaster} image={[0,0,fullImg.getWidth(),fullImg.getHeight()]} />
             </div>
         ): (<div>Generating full image...</div>)}
         {rasters ? (
-            <div> Cropped Image
+            <div> <h3>Cropped Image</h3>
             <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
             </div>
         ): (<div>Generating crop image...</div>)}
             </div>
         {data ? (
-          <div>
+          <div className="tiff-info">
             {data.map((item, index) => (
-              <div key={index}>
-                Type: {indToLegend(item.value)} ({indToColor(item.value)}), Relative Frequency: {freqToPercentage(item.relativeFrequency)}%
+              <div key={index} style={{color: indToColor(item.value) }}>
+                Type: {indToLegend(item.value)} ({indToColor(item.value)}), Percentage: {freqToPercentage(item.relativeFrequency)}%
               </div>
             ))}
           </div>

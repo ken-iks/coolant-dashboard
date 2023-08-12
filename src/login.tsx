@@ -42,8 +42,9 @@ const LoginPage: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-form">
-        <h2>Login</h2>
-        <div onSubmit = {handleLogin} onKeyDown={handleKeyDown}>
+        <img src="/coolant-logo.png" className="coolant-logo" />
+        
+        <div onSubmit = {handleLogin} onKeyDown={handleKeyDown} className="login-entries">
           <input
             type="text"
             placeholder="Email"
@@ -57,13 +58,15 @@ const LoginPage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             
           />
+          <div>
           <button type="submit" onClick={handleLogin}>
           Login
           </button>
+          </div>
         </div>
       </div>
     </div>
-  );
+  ); 
 };
 
 export default LoginPage;

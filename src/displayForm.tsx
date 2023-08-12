@@ -115,10 +115,10 @@ const DisplayForm: React.FC = () => {
         {formSubmitted && (addNewMap(points))}
         {!formSubmitted && <div>
         <div className="plot">
-        <h1> Here is a full image of the Desa Plot </h1>
+        <h1> Full image of the Desa Plot </h1>
         <img src="./8_class_kmeans_ar.png" alt="Desa Plot" className='fullimg'></img>
         <p> To get specific details about a section of the plot, input the longitude and latitude of the 4 corners of the
-            polygon you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </p> 
+            area you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </p> 
         </div>
         <form onSubmit={handleSubmit} className="inputs">
             <label>

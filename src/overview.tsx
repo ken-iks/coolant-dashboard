@@ -11,6 +11,7 @@ import useGetUser from './getuser';
 
 
 
+
 const Overview: React.FC = () => {
   const nam = useGetUser();
   const name = nam.charAt(0).toUpperCase() + nam.slice(1);
@@ -69,7 +70,8 @@ const Overview: React.FC = () => {
 
     return (
       <div>
-      <h1> Hey {name}! Here are your project locations. Click on a project for more information </h1>
+      <h1> Welcome, {name} </h1>
+      <h3>Here are your project locations. Click on a project for more information</h3>
       <div id="map" className='map'></div>
     </div>
     );

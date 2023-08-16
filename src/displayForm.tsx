@@ -112,10 +112,11 @@ const DisplayForm: React.FC = () => {
         {formSubmitted && (addNewMap(points))}
         {!formSubmitted && <div>
         <div className="plot">
-        <h1> Full image of the Desa Plot </h1>
-        <img src="./8_class_kmeans_ar.png" alt="Desa Plot" className='fullimg'></img>
-        <p> To get specific details about a section of the plot, input the longitude and latitude of the 4 corners of the
-            area you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </p> 
+        <h1> Full sentinal image of the Desa Plot </h1>
+        <img src="./original_desa_satellite.png" alt="Desa Plot" className='fullimg'></img>
+        <p> To get specific details about a section of the plot, input the longitude and latitude of the corners of the
+            area you would like to learn more about. (Seperate long and lat by space, eg 'LO LA'). Use the add point button
+            to increase the number of vertices in your polygon. </p> 
         </div>
         <form onSubmit={handleSubmit} className="inputs">
             {formState.map((point, index) => (

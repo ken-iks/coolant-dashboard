@@ -20,7 +20,7 @@ body {
 }
 
 .sidebar {
-  width: 300px;
+  flex: 0.22;
   background-color: #aea8a8;
   color: black;
   padding: 16px;

@@ -15,7 +15,18 @@ const ModelViewerPage: React.FC = () => {
   const nam = useGetUser();
   const name = nam.charAt(0).toUpperCase() + nam.slice(1);
 
+  const handleDownload = () => {
+    return (
+      <a href="/cropped_june_2_data.glb" download="model.glb" className='
+      download-button'>
+          <button>Download GLTF</button>
+      </a>
+          );
+    }
+ 
+
   return (
+    <div className='whole'>
     <div className="canvas">
       <h1> 3D Model Viewer </h1>
       <h1> {name}'s Project </h1>
@@ -27,6 +38,8 @@ const ModelViewerPage: React.FC = () => {
           <Rock />
         </React.Suspense>
       </Canvas>
+      {handleDownload()}
+  </div>
   </div>
   )
 };

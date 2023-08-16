@@ -163,19 +163,20 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     return (
         <div>
             <div className='image-results'>
+            {rasters ? (
+            <div> <h3>Cropped Image</h3>
+            <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
+            </div>
+        ): (<div>Generating cropped labelled image...</div>)}
           {(fullRaster && fullImg) ? (
             <div> <h3>Full Image</h3>
             <RasterDisplay raster={fullRaster} image={[0,0,fullImg.getWidth(),fullImg.getHeight()]} />
             </div>
-        ): (<div>Generating full image...</div>)}
-        {rasters ? (
-            <div> <h3>Cropped Image</h3>
-            <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
-            </div>
-        ): (<div>Generating crop image...</div>)}
+        ): (<div>Generating full labelled image...</div>)}
             </div>
         {data ? (
           <div className="tiff-info">
+            <h1> Label info </h1>
             {data.map((item, index) => (
               <div key={index} style={{color: indToColor(item.value) }}>
                 Type: {indToLegend(item.value)} ({indToColor(item.value)}), Percentage: {freqToPercentage(item.relativeFrequency)}%

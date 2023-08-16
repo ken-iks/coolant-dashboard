@@ -42,21 +42,22 @@ const LoginPage: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-form">
-        <img src="/coolant-logo.png" className="coolant-logo" />
-        
+        <img src="/coolant_logo_new2.png" className="coolant-logo" />
+        <h5 className='login-words'>Coolant Dashboard: <br /> For Next Generation Forest Insights</h5>
         <div onSubmit = {handleLogin} onKeyDown={handleKeyDown} className="login-entries">
           <input
+            className='username-input'
             type="text"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <br />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            
           />
           <div>
           <button type="submit" onClick={handleLogin}>
@@ -65,6 +66,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <h5 className='words'> Bringing trust to carbon markets and helping scale the world's first gigaton of carbon removals </h5>
     </div>
   ); 
 };

@@ -2,4 +2,9 @@
     display: flex;
     align-items: stretch;
     height:max-content;
+    opacity: 0.9;
+}
+
+.main-content {
+    height: max-content;
 }

@@ -1,6 +1,6 @@
 # Internal Dashboard for Coolant.earth
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). To gain full functionality of the app, you must request the /public/ folder, which contains files too large to be stored on github.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). To gain full functionality of the app, you must request the /public/ folder, which contains files too large to be stored on github. Frontend built with React TS and backend using Firebase.
 
 ## Available Scripts
 

@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 //@ts-ignore
 import { GeoTIFFImage, ReadRasterResult, fromUrl } from "geotiff";
 import RasterDisplay from './displayRaster';
+import { writeArrayBuffer } from 'geotiff';
+import { TypedArray } from 'three';
 
 type FrequencyData = {
     value: number;
@@ -65,14 +67,22 @@ type TiffViewerProps = {
     windows: number[]
 }
 
+type MetaData = {
+    height: number,
+    width: number
+}
+
 function polyToRect(window: number[]) {
-    const left = Math.min(window[0], window[2], window[4], window[6]);
-    const right = Math.max(window[0], window[2], window[4], window[6]);
-    const top = Math.min(window[1], window[3], window[5], window[7]);
-    const bottom = Math.max(window[1], window[3], window[5], window[7]);
+    var xpoints: number[] = window.filter((_, index) => index % 2 === 0);
+    var ypoints: number[] = window.filter((_, index) => index % 2 === 1);
+    const left = Math.min(...xpoints);
+    const right = Math.max(...xpoints);
+    const top = Math.min(...ypoints);
+    const bottom = Math.max(...ypoints);
     console.log(left, top, right, bottom)
     return [left, top, right, bottom];
 }
+
 
   
 
@@ -94,10 +104,14 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
         const data = await img.readRasters({ window: rect });
         return data;
     }
+
+
+
     const [data, setData] = useState<FrequencyData | null>(null);
     const [rasters, setRasters] = useState<ReadRasterResult | null>(null);
     const [fullImg, setFullImg] = useState<GeoTIFFImage | null>(null);
     const [fullRaster, setFullRaster] = useState<ReadRasterResult | null>(null);
+   
     
 
     // Load our data tile from url, arraybuffer, or blob, so we can work with it:
@@ -114,9 +128,15 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
         
         data.then(result => {
             var rasters = result;
+            console.log('Cropped raster:');
             console.log(rasters);
+            const metadata = {
+                height: rasters.height,
+                width: rasters.width
+            }
             setRasters(rasters);
             if (Array.isArray(rasters)) {
+                console.log(rasters[0]);
                 rasters.forEach((band, index) => {
                     const frequencies: { [key: number]: number } = {};
                     // Calculate the frequencies for each unique value in the band
@@ -133,8 +153,8 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
                     console.log(`Relative Frequencies for Band ${index}:`, relativeFrequencies);
                     setData(relativeFrequencies);
                     });
-
-            }} )
+            }
+        } )
 
             
     }) }, [])

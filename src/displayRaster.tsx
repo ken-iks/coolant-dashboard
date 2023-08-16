@@ -9,6 +9,19 @@ type RasterDisplayProps = {
 const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    const handleDownload = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const imageURI = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = imageURI;
+        link.download = 'canvas.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
 
   // Define the class colors
   const classColors = ['#09150a', '#0000FF', '#dfd0c0', '#38833c','#214c23', '#DAA06D', '#a6d9a8', '#702963'];
@@ -25,7 +38,6 @@ const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
       if (!ctx) return;
       console.log(image);
    
-
       // HARD CODING - NEED TO AUTOMATE
       const imageData = ctx.createImageData(image[2]-image[0], image[3]-image[1]);
 
@@ -68,7 +80,12 @@ const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
     loadRaster();
   }, []);
 
-  return <canvas ref={canvasRef} className='rasterview' />;
+  return ( <div>
+  <canvas ref={canvasRef} className='rasterview' />
+  <button onClick={handleDownload}>
+            Download Image
+        </button>
+  </div>);
 };
 
 export default RasterDisplay;

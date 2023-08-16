@@ -18,15 +18,14 @@ const bboxHeight = 0.180022382937552
 const addNewMap = (points: number[]) => {
     console.log(points)
 
-    var xpoints: number[] = [points[0], points[2], points[4], points[6]];
-    var ypoints: number[] = [points[1], points[3], points[5], points[7]];
+    var xpoints: number[] = points.filter((_, index) => index % 2 === 0);
+    var ypoints: number[] = points.filter((_, index) => index % 2 === 1);
 
     const pointsString = Array.from({ length: points.length / 2 }, (_, i) => {
         return `${points[2 * i]},${points[2 * i + 1]}`;
       }).join(' ');
 
     console.log(pointsString);
-
     console.log(points.join(' '));
 
     // Validation 
@@ -51,14 +50,15 @@ const addNewMap = (points: number[]) => {
 const DisplayForm: React.FC = () => {
 
     const [points, setPoints] = React.useState<number[]>([]);
+
     let g1, g2, g3, g4;
 
-    const [formState, setFormState] = useState({
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
-    });
+    const [formState, setFormState] = useState<Array<string>>([
+     "",
+    "",
+    "",
+    "",
+    ]);
 
 
 
@@ -75,39 +75,36 @@ const DisplayForm: React.FC = () => {
         return ( converter(parseFloat(arr[0]), parseFloat(arr[1])) );
         }
 
-    const handleInputChange = (event: any) => {
-        setFormState({
-            ...formState,
-            [event.target.name]: event.target.value,
-        });
+    const handleInputChange = (index: number, event: any) => {
+        const formPoints = [...formState];
+        formPoints[index] = event.target.value;
+        setFormState(formPoints);
         };
     
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        const { q1, q2, q3, q4 } = formState;
-        console.log(q1, q2, q3, q4);
-        g1 = AnsToLoc(q1);
-        g2 = AnsToLoc (q2);
-        g3 = AnsToLoc(q3);
-        g4 = AnsToLoc (q4);
-        console.log(g1, g2, g3, g4);
-        pointsConverted = [g1[0], g1[1], g2[0], g2[1], g3[0], g3[1], g4[0], g4[1]];
+        const convertedPoints = formState.map(point => AnsToLoc(point));
+        pointsConverted = convertedPoints.flat();
         setPoints(pointsConverted);
         setFormSubmitted(true);
         };
     
     const handleReset = () => {
         // Reset the form state
-        setFormState({
-            q1: '',
-            q2: '',
-            q3: '',
-            q4: '',
-        });
+        setFormState([
+            '',
+            '',
+            '',
+            '',
+        ]);
         setFormSubmitted(false); // Mark the form as not submitted
         };
+
+    const handleAddPoint = () => {
+        setFormState([...formState, '']);
+    }
 
 
     return (
@@ -121,48 +118,25 @@ const DisplayForm: React.FC = () => {
             area you would like to learn more about. (Seperate long and lat by space, eg 'LO LA') </p> 
         </div>
         <form onSubmit={handleSubmit} className="inputs">
-            <label>
-            Point 1:
-            <input
-                type="text"
-                name="q1"
-                value={formState.q1}
-                onChange={handleInputChange}
-            />
-            </label>
-            <br />
-            <label>
-            Point 2:
-            <input
-                type="text"
-                name="q2"
-                value={formState.q2}
-                onChange={handleInputChange}
-            />
-            </label>
-            <br />
-            <label>
-            Point 3:
-            <input
-                type="text"
-                name="q3"
-                value={formState.q3}
-                onChange={handleInputChange}
-            />
-            </label>
-            <br />
-            <label>
-            Point 4:
-            <input
-                type="text"
-                name="q4"
-                value={formState.q4}
-                onChange={handleInputChange}
-            />
-            </label>
-            <br />
+            {formState.map((point, index) => (
+                        <div key={index}>
+                            <label>
+                                {`Point ${index + 1}:`}
+                                <input
+                                    type="text"
+                                    value={point}
+                                    onChange={(event) => handleInputChange(index, event)}
+                                />
+                            </label>
+                            <br />
+                        </div>
+                    ))}
             <button type="submit">Submit</button>
-        </form> </div>}
+        </form> 
+        <div className="addPoint">
+        <button onClick={handleAddPoint}>Add Point</button>
+        </div>
+        </div>}
         <button onClick={handleReset}>Reset</button> {/* Reset button */}
         </div>
     )

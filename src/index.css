@@ -21,7 +21,7 @@ body {
 
 .sidebar {
   flex: 0.22;
-  background-color: #aea8a8;
+  background-color: #fff;
   color: black;
   padding: 16px;
   font-family: sans-serif;
@@ -45,11 +45,11 @@ body {
 }
 
 .sidebar li:hover {
-  background-color: #555;
+  background-color: grey;
 }
 
 .sidebar li.active {
-  background-color: #007bff;
+  background-color: grey;
 }
 
 .main-content {
@@ -69,10 +69,14 @@ div > div {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #fff;
+  color: grey;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
+}
+
+.sign-out-button:hover {
+  background-color: rgb(108, 108, 108);
+  color: white;
 }

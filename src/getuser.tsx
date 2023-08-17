@@ -24,6 +24,9 @@ function useGetUser() {
         console.log(currentUser);
         const userEmail = currentUser.email;
         if (userEmail) {
+            if ((userEmail) === 'product@bumi-terra.com') {
+                return 'bumiterra';
+            }
             return userEmail.split('@')[0];
         }
     }

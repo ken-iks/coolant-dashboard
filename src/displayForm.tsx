@@ -132,13 +132,13 @@ const DisplayForm: React.FC = () => {
                             <br />
                         </div>
                     ))}
-            <button type="submit">Submit</button>
+                    <div className="display-button-submit">
+            <button className='display-button' type="submit">Submit</button>
+            </div>
         </form> 
-        <div className="addPoint">
-        <button onClick={handleAddPoint}>Add Point</button>
-        </div>
+        <button className='display-button' onClick={handleAddPoint}>Add Point</button>
         </div>}
-        <button onClick={handleReset}>Reset</button> {/* Reset button */}
+        <button className='display-button' onClick={handleReset}>Reset</button> {/* Reset button */}
         </div>
     )
 }

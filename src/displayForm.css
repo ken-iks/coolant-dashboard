@@ -4,6 +4,8 @@
 
 .inputs {
     text-align: center;
+    display: grid;
+    place-items: center;
 }
 
 .fullimg {
@@ -14,3 +16,13 @@
 .plot {
     text-align: center;
 }
+
+.display-button {
+    background-color: grey;
+    color: white;
+}
+
+.display-button:hover {
+    background-color: rgb(108, 108, 108);
+  }
+

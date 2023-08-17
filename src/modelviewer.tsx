@@ -19,7 +19,7 @@ const ModelViewerPage: React.FC = () => {
     return (
       <a href="/cropped_june_2_data.glb" download="model.glb" className='
       download-button'>
-          <button>Download GLTF</button>
+          <button className='button-object'>Download GLTF</button>
       </a>
           );
     }

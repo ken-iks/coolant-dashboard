@@ -116,3 +116,12 @@ body {
     text-align: center;
   }
 
+.login-button {
+  background-color:#2e2e2e;
+  color: grey;
+  width: 100px;
+}
+
+.login-button:hover {
+  background-color: rgb(108,108,108);
+}

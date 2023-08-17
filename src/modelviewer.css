@@ -31,5 +31,16 @@
 }
 
 .download-button {
-  color: black;
+  color: grey;
+  background-color: white;
 }
+
+.button-object {
+  color: white;
+  background-color: grey;
+}
+
+.button-object:hover {
+  background-color: rgb(108, 108, 108);
+}
+

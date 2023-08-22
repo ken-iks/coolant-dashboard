@@ -23,6 +23,7 @@ function useGetUser() {
     if (currentUser) {
         console.log(currentUser);
         const userEmail = currentUser.email;
+        // Hard coding bumiterra's email. Best bet is it have name saved in Firebase
         if (userEmail) {
             if ((userEmail) === 'product@bumi-terra.com') {
                 return 'bumiterra';

@@ -16,9 +16,10 @@ const Overview: React.FC = () => {
   const nam = useGetUser();
   const name = nam.charAt(0).toUpperCase() + nam.slice(1);
 
-  // This will change based on who's project it is
-  const myLatLong = { lat: 0.6509, lng: 111.53073 };
+  // Project location. Need to automate
+  const myLatLong = { lat: 0.65129, lng: 111.53028 };
 
+  // Function to generate marker for a given project location.
   function geocodeLatLng(
     geocoder: google.maps.Geocoder,
     map: google.maps.Map,
@@ -29,10 +30,10 @@ const Overview: React.FC = () => {
       .geocode({ location: myLatLong })
       .then((response) => {
         if (response.results[0]) {
-          map.setZoom(14);
+          map.setZoom(18);
+          // Will need to automate content
           infowindow.setContent('This project is located at: ' + response.results[0].formatted_address
-          + '. Set in the beautiful rollings hills of Indonesia Borneo, Merakai is an idyllic portion of '
-          + 'rainforest that has faced increasing pressures from palm oil, rubber plantains, and selective local timber harvesting.');
+          + ', the beautiful rollings hills of Indonesia Borneo, Merakai.');
           infowindow.open(map, marker);
         } else {
           window.alert("No results found");
@@ -46,7 +47,7 @@ const Overview: React.FC = () => {
       apiKey: 'AIzaSyBD1laELKvYHTLFnaugKqNuYHD93MikLF0',
       version: 'weekly',
     });
-
+    // Loading map as: map
     loader.load().then(async () => {
       const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
       const map = new Map(document.getElementById("map") as HTMLElement, {
@@ -54,6 +55,14 @@ const Overview: React.FC = () => {
         zoom: 6,
         mapTypeId: 'hybrid',
       });
+      // Setting color of project grid
+      map.data.setStyle({
+        fillColor: 'blue',     
+        strokeWeight: 1,       
+        strokeColor: 'red',    
+        fillOpacity: 0.5       
+      });  
+      // Adding a marker to map. Should be able to add multiple markers to a map.
       const mapMarker = new google.maps.Marker({
         position: myLatLong,
         map,
@@ -64,7 +73,15 @@ const Overview: React.FC = () => {
       mapMarker.addListener("click", () =>{
         geocodeLatLng(geocoder, map, mapMarker, infowindow);
       })
-
+      // Fetch geojson from github gist
+      fetch('https://gist.githubusercontent.com/kennybop/d1716a6ccd16cf464f001a0cdd3532d6/raw/561fda40328b5a660c3faea2b58df583aee2f0a0/btg.geojson')
+      .then(data => {
+        // Parse the json in the response data
+        const res = data.json();
+        // Resolve the promise and add to map
+        res.then(x => map.data.addGeoJson(x));
+      })
+      .catch(error => console.error('Error fetching GeoJSON:', error));
     });
 
 

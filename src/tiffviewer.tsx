@@ -45,17 +45,17 @@ function indToColor(ind: number) {
         case 0:
             return namer('#09150a').html[0].name;
         case 1:
-            return namer('#702963').html[0].name;
+            return namer('#DFD0C0').html[0].name;
         case 2:
-            return namer('#dfd0c0').html[0].name;
-        case 3:
             return namer('#38833C').html[0].name;
+        case 3:
+            return namer('#A6D9A8').html[0].name;
         case 4:
             return namer('#214C23').html[0].name;
         case 5:
             return namer('#DAA06D').html[0].name;
         case 6:
-            return namer('#A6D9A8').html[0].name;
+            return namer('#702963').html[0].name;
         case 7:
             return namer('#0000FF').html[0].name;
         default:
@@ -67,10 +67,7 @@ type TiffViewerProps = {
     windows: number[]
 }
 
-type MetaData = {
-    height: number,
-    width: number
-}
+
 
 function polyToRect(window: number[]) {
     var xpoints: number[] = window.filter((_, index) => index % 2 === 0);
@@ -88,14 +85,17 @@ function polyToRect(window: number[]) {
 
 const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     
+    // Function for generating an image of a tiff (essentially a reference)
     async function getTiff(url: string) {
         const tiff = await fromUrl(url);
         const image = await tiff.getImage();
         return image;
     }
 
+    // To access tiff data, we have an image and a window 
+    // The window is the polygon section of the full tiff we want to access
     async function getData(img: GeoTIFFImage, window: number[]) {
-        // Add padding 
+        // Add padding to the section (minimum bounding box around points)
         const rect = polyToRect(window);
         console.log(window);
         // Get rasters
@@ -104,7 +104,6 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
         const data = await img.readRasters({ window: rect });
         return data;
     }
-
 
 
     const [data, setData] = useState<FrequencyData | null>(null);
@@ -117,7 +116,7 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     // Load our data tile from url, arraybuffer, or blob, so we can work with it:
     
     const canvasRef = useRef(null);
-    
+
     useEffect(()=>{
     getTiff('./8_class_kmeans_v2.tif').then(image => {
         console.log(image.getWidth());
@@ -130,10 +129,6 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
             var rasters = result;
             console.log('Cropped raster:');
             console.log(rasters);
-            const metadata = {
-                height: rasters.height,
-                width: rasters.width
-            }
             setRasters(rasters);
             if (Array.isArray(rasters)) {
                 console.log(rasters[0]);
@@ -154,9 +149,7 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
                     setData(relativeFrequencies);
                     });
             }
-        } )
-
-            
+        } )       
     }) }, [])
 
     
@@ -165,12 +158,12 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
             <div className='image-results'>
             {rasters ? (
             <div> <h3>Cropped Image</h3>
-            <RasterDisplay raster={rasters} image={polyToRect(props.windows)} />
+            <RasterDisplay raster={rasters} image={polyToRect(props.windows)} polygon={props.windows} />
             </div>
         ): (<div>Generating cropped labelled image...</div>)}
           {(fullRaster && fullImg) ? (
             <div> <h3>Full Image</h3>
-            <RasterDisplay raster={fullRaster} image={[0,0,fullImg.getWidth(),fullImg.getHeight()]} />
+            <RasterDisplay raster={fullRaster} image={[0,0,fullImg.getWidth(),fullImg.getHeight()]} polygon={null} />
             </div>
         ): (<div>Generating full labelled image...</div>)}
             </div>

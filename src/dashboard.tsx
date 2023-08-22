@@ -9,8 +9,15 @@ import { getAuth, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './dashboard.css';
 
+const LoadingComponent = () => {
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  );
+}
 
-const auth = getAuth();
 
 export enum DashboardSection {
   Overview = 'Project Details',
@@ -20,9 +27,30 @@ export enum DashboardSection {
 }
 
 const Dashboard: React.FC = () => {
+
   const [selectedSection, setSelectedSection] = useState<DashboardSection>(DashboardSection.Overview);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const nav = useNavigate();
+
+  const auth = getAuth();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setAuthChecked(true);
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleSectionChange = (section: DashboardSection) => {
     setSelectedSection(section);
@@ -53,6 +81,12 @@ const Dashboard: React.FC = () => {
     });
   }
 
+  if (!authChecked) {
+    return <LoadingComponent />;
+  }
+  if (!isAuthenticated) {
+    nav('./login');
+  }
   return (
     <div>
       <div className="dashboard-container">

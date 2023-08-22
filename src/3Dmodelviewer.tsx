@@ -1,7 +1,9 @@
 import { Canvas, useLoader, useFrame } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-function Rock(props: JSX.IntrinsicElements['mesh']) {
+// Generate actual 3D model object
+
+function Model(props: JSX.IntrinsicElements['mesh']) {
 
     console.log("Loading gtlf");
 
@@ -17,4 +19,4 @@ function Rock(props: JSX.IntrinsicElements['mesh']) {
   );
 };
 
-export default Rock;
+export default Model;

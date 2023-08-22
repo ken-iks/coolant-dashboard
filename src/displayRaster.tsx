@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { GeoTIFFImage, ReadRasterResult, fromUrl } from 'geotiff';
 
 type RasterDisplayProps = {
-    raster: ReadRasterResult;
-    image: number[]
+    raster: ReadRasterResult,
+    image: number[],
+    polygon: number[] | null
   };
 
-const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
+const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image, polygon }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const handleDownload = () => {
@@ -22,8 +23,51 @@ const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
       }
     }
 
+    const scalePolygon = (points: number[]) => {
+      var xpoints: number[] = points.filter((_, index) => index % 2 === 0);
+      var ypoints: number[] = points.filter((_, index) => index % 2 === 1);
+      const left = Math.min(...xpoints);
+      const top = Math.min(...ypoints);
+      for (let i = 0; i < points.length; i++) {
+        if (i % 2 === 0) {
+          points[i] = points[i] - left;
+        }
+        else {
+          points[i] = points[i] - top;
+        }
+      }
+      return points;
+    }
 
-  // Define the class colors
+    const drawPolygon = (canvas: HTMLCanvasElement | null, points: number[] | null) => {
+      if (!canvas) return;
+
+      if (!points) return;
+    
+      const ctx = canvas.getContext('2d');
+      if (!ctx || points.length < 4) return;  // We need at least 2 points to draw a line
+
+      points = scalePolygon(points);
+  
+      ctx.strokeStyle = "#FF0000"; // Set the stroke color (red)
+      ctx.lineWidth = 5;           // Set the line width
+      ctx.beginPath();
+  
+      // Start from the first point
+      ctx.moveTo(points[0], points[1]);
+  
+      // Loop through the rest of the points
+      for (let i = 2; i < points.length; i += 2) {
+          ctx.lineTo(points[i], points[i + 1]);
+      }
+  
+      ctx.closePath();  // This will close the path and join the last point with the first
+      ctx.stroke();     // Render the polygon
+  
+    }
+
+
+  // Define the class colors - automate?
   const classColors = ['#09150a', '#0000FF', '#dfd0c0', '#38833c','#214c23', '#DAA06D', '#a6d9a8', '#702963'];
 
   useEffect(() => {
@@ -38,10 +82,9 @@ const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
       if (!ctx) return;
       console.log(image);
    
-      // HARD CODING - NEED TO AUTOMATE
       const imageData = ctx.createImageData(image[2]-image[0], image[3]-image[1]);
 
-      const width = ctx.canvas.width; // Assuming you have the width and height of the image
+      const width = ctx.canvas.width;
       const height = ctx.canvas.height;
       console.log(width * height);
         
@@ -76,6 +119,7 @@ const RasterDisplay: React.FC<RasterDisplayProps> = ({ raster, image }) => {
     }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.putImageData(imageData, 0, 0);
+      //drawPolygon(canvas, polygon);
     }
     loadRaster();
   }, []);

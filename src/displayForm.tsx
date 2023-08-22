@@ -21,6 +21,7 @@ const addNewMap = (points: number[]) => {
     var xpoints: number[] = points.filter((_, index) => index % 2 === 0);
     var ypoints: number[] = points.filter((_, index) => index % 2 === 1);
 
+    // Validation -> logging points
     const pointsString = Array.from({ length: points.length / 2 }, (_, i) => {
         return `${points[2 * i]},${points[2 * i + 1]}`;
       }).join(' ');
@@ -28,14 +29,17 @@ const addNewMap = (points: number[]) => {
     console.log(pointsString);
     console.log(points.join(' '));
 
-    // Validation 
+    // Validation -> making sure points fall within bounds
     if (points.some((num) => num < 0) || 
         points.some((num) => isNaN(num)) ||
         xpoints.some((num) => num > pixelWidth) || 
         ypoints.some((num) => num > pixelHeight)
         ) {
-            return (
+            return (<div>
                 <h1> Invalid points. Try again </h1>
+                <p> LAT must be between {bbox[0]} and {bbox[2]} </p>
+                <p> LONG must be between {bbox[1]} and {bbox[3]} </p>
+                </div>
             )
         }
     else { 

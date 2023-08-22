@@ -3,9 +3,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { auth } from './firebaseConfig';
+import Dashboard from './dashboard';
 
 
 const LoginPage: React.FC = () => {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      nav('/');
+    }
+  })
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState("");
 
@@ -17,7 +24,7 @@ const LoginPage: React.FC = () => {
       // Signed in
       var user = userCredential.user;
       console.log('Blah')
-      nav('./dashboard')
+      nav('/')
     })
     .catch((error) => {
       setEmail('');
@@ -75,14 +82,9 @@ export default LoginPage;
 
 
 /* 
-All accounts need to be name@coolant.earth
 
 Test login
 Email: pilot@coolant.earth
 Pword: Pilot@123
 
-Add this to Login if you want to sign up another user
-<button type="submit" onClick={handleSignUp} disabled>
-  Sign Up
-</button>
 */

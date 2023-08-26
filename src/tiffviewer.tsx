@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 //@ts-ignore
 import { GeoTIFFImage, ReadRasterResult, fromUrl } from "geotiff";
 import RasterDisplay from './displayRaster';
-import { writeArrayBuffer } from 'geotiff';
-import { TypedArray } from 'three';
 
 type FrequencyData = {
     value: number;
@@ -45,13 +43,13 @@ function indToColor(ind: number) {
         case 0:
             return namer('#09150a').html[0].name;
         case 1:
-            return namer('#DFD0C0').html[0].name;
+            return namer('#214C23').html[0].name;
         case 2:
             return namer('#38833C').html[0].name;
         case 3:
             return namer('#A6D9A8').html[0].name;
         case 4:
-            return namer('#214C23').html[0].name;
+            return namer('#DFD0C0').html[0].name;
         case 5:
             return namer('#DAA06D').html[0].name;
         case 6:
@@ -117,8 +115,11 @@ const TiffViewer: React.FC<TiffViewerProps> = (props) => {
     
     const canvasRef = useRef(null);
 
+    const tiffPath = process.env.PUBLIC_URL + '/8_class_kmeans_v2.tif'
+
     useEffect(()=>{
-    getTiff('./8_class_kmeans_v2.tif').then(image => {
+    getTiff(tiffPath).then(image => {
+        // This is how you get pixel width/height and band info
         console.log(image.getWidth());
         console.log(image.getHeight());
         console.log(image.getBoundingBox());

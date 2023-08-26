@@ -1,11 +1,11 @@
-import React, {useState, useEffect, startTransition } from 'react';
+import React from 'react';
 import Model from './3Dmodelviewer';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import './modelviewer.css';
-import { Environment, OrbitControls, useProgress, Html } from '@react-three/drei';
+import { OrbitControls, useProgress, Html } from '@react-three/drei';
 import useGetUser from './getuser';
 
-// Function for loading circle as model is rendering. (TODO: center)
+// Function for loading circle as model is rendering. (TODO: center it)
 function Loader() {
   const { active, progress, errors, item, loaded, total } = useProgress()
   return <Html center className='loader' ></Html>

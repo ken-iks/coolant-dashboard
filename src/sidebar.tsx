@@ -1,11 +1,6 @@
 // Sidebar.tsx
 import React from 'react';
 import { DashboardSection } from './dashboard';
-import GetUser from './getuser';
-import { useState, useEffect } from 'react';
-import { getAuth, User } from 'firebase/auth';
-import { auth } from './firebaseConfig'
-import firebase from 'firebase/compat';
 import useGetUser from './getuser';
 import "./sidebar.css";
 
@@ -25,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedSection, onSectionChange }) =
 
   return (
     <div className="sidebar">
-      <img src="/bumiterra-logo.png" className='logo' />
+      <img src={`${process.env.PUBLIC_URL}/bumiterra-logo.png`} className='logo' />
       <div className='extra-words-on-sidebar'>
       <h1>{name}</h1>
       <h3> Carbon made easy </h3>

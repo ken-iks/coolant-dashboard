@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { auth } from './firebaseConfig';
-import Dashboard from './dashboard';
 
 
 const LoginPage: React.FC = () => {
+  // If user is already logged in then take them straight to dashboard
   auth.onAuthStateChanged(user => {
     if (user) {
-      nav('/');
+      nav('/dashboard');
     }
   })
 
@@ -23,8 +23,7 @@ const LoginPage: React.FC = () => {
     .then((userCredential) => {
       // Signed in
       var user = userCredential.user;
-      console.log('Blah')
-      nav('/')
+      nav('/dashboard')
     })
     .catch((error) => {
       setEmail('');
@@ -41,15 +40,11 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleSignUp = () => {
-    nav('./signup')
-  };
-
 
   return (
     <div className="login-page">
       <div className="login-form">
-        <img src="/coolant_logo_new2.png" className="coolant-logo" />
+        <img src={`${process.env.PUBLIC_URL}/coolant_logo_new2.png`} className="coolant-logo" />
         <h5 className='login-words'>Coolant Dashboard: <br /> For Next Generation Forest Insights</h5>
         <div onSubmit = {handleLogin} onKeyDown={handleKeyDown} className="login-entries">
           <input

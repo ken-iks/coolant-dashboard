@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { auth } from './firebaseConfig';
 import './login.css';
 import { useNavigate } from 'react-router-dom'; 
-import Dashboard from './dashboard';
 
 
 const SignUp: React.FC = () => {
@@ -13,7 +12,6 @@ const SignUp: React.FC = () => {
   const handleSignin = () => {
     auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        console.log('testing')
         // Signed up successfully
         var user = userCredential.user;
         // Redirect to the dashboard after successful sign-up

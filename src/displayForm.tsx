@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import './siteeval.css';
 import TiffViewer from "./tiffviewer";
 import './displayForm.css';
 import './displayRaster.css';
@@ -8,7 +6,8 @@ import './displayRaster.css';
 let pointsConverted: number[];
   
 
-// HARD CODING VALUES FROM DESA PLOT FOR DEADLINE. WILL NEED TO AUTOMATE
+// HARD CODING VALUES FROM DESA PLOT. TODO: AUTOMATE
+// These values are saved in Google Firestore, but access is non trivial due to React Complications with asynchronous fetching
 const bbox = [111.82264589331169, 0.14337111934547572, 112.029438071716, 0.3233935022830277] 
 const pixelWidth = 2302 
 const pixelHeight = 2004 
@@ -55,15 +54,12 @@ const DisplayForm: React.FC = () => {
 
     const [points, setPoints] = React.useState<number[]>([]);
 
-    let g1, g2, g3, g4;
-
     const [formState, setFormState] = useState<Array<string>>([
      "",
     "",
     "",
     "",
     ]);
-
 
 
     const converter = (long: any, lat: any) => {
@@ -117,7 +113,7 @@ const DisplayForm: React.FC = () => {
         {!formSubmitted && <div>
         <div className="plot">
         <h1> Full sentinal image of the Desa Plot </h1>
-        <img src="./original_desa_satellite.png" alt="Desa Plot" className='fullimg'></img>
+        <img src={`${process.env.PUBLIC_URL}/original_desa_satellite.png`} alt="Desa Plot" className='fullimg'></img>
         <p> To get specific details about a section of the plot, input the longitude and latitude of the corners of the
             area you would like to learn more about. (Seperate long and lat by space, eg 'LO LA'). Use the add point button
             to increase the number of vertices in your polygon. </p> 

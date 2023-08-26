@@ -1,10 +1,8 @@
-// Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import Sidebar from './sidebar';
 import Overview from './overview';
 import ModelViewerPage from './modelviewer';
 import SiteEvaluation from './siteeval';
-//import { auth } from './firebaseConfig';
 import { getAuth, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './dashboard.css';
@@ -23,7 +21,6 @@ export enum DashboardSection {
   Overview = 'Project Details',
   ModelViewer = '3D Model Viewer',
   SiteEvaluation = 'Site Evaluator',
-  TiffViewer = 'Tiff Viewer'
 }
 
 const Dashboard: React.FC = () => {
@@ -74,7 +71,7 @@ const Dashboard: React.FC = () => {
   const handleSignOut = () => {
     auth.signOut().then(() => {
       // Sign-out successful.
-      nav('/')
+      nav('/login')
     }).catch((error) => {
       // An error happened.
       alert('Bad logout')
@@ -85,7 +82,7 @@ const Dashboard: React.FC = () => {
     return <LoadingComponent />;
   }
   if (!isAuthenticated) {
-    nav('./login');
+    nav('/login');
   }
   return (
     <div>

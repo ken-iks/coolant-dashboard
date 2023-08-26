@@ -1,23 +1,29 @@
 // Overview.tsx
-import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/compat';
-import { useMemo } from "react";
-import { auth } from './firebaseConfig';
-import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { PassThrough } from 'stream';
+import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader"
 import './overview.css';
 import useGetUser from './getuser';
-
+import useGetModel from './getModel';
 
 
 
 const Overview: React.FC = () => {
+
+  // Getting name for personalized map intro
   const nam = useGetUser();
+  // Capitalizing name
   const name = nam.charAt(0).toUpperCase() + nam.slice(1);
 
+  // Getting project info from backend - this is the model for connecting backend
+  // TODO: Utilize this model for the rest of the pages for which data is stored on the backend
+  const project = useGetModel();
+  if (!project) {
+    console.log("Gathering project info")
+    return (<div> Loading... </div>)
+  }
+
   // Project location. Need to automate
-  const myLatLong = { lat: 0.65129, lng: 111.53028 };
+  const myLatLong = { lat: project.lat, lng: project.long };
 
   // Function to generate marker for a given project location.
   function geocodeLatLng(
@@ -33,7 +39,7 @@ const Overview: React.FC = () => {
           map.setZoom(18);
           // Will need to automate content
           infowindow.setContent('This project is located at: ' + response.results[0].formatted_address
-          + ', the beautiful rollings hills of Indonesia Borneo, Merakai.');
+          + project.description);
           infowindow.open(map, marker);
         } else {
           window.alert("No results found");
@@ -43,6 +49,7 @@ const Overview: React.FC = () => {
   }  
 
   function loadMap() {
+    // TODO: Should find a way to hide this API Key for safety
     const loader = new Loader({
       apiKey: 'AIzaSyBD1laELKvYHTLFnaugKqNuYHD93MikLF0',
       version: 'weekly',
@@ -51,7 +58,7 @@ const Overview: React.FC = () => {
     loader.load().then(async () => {
       const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
       const map = new Map(document.getElementById("map") as HTMLElement, {
-        center: { lat: 0.65119, lng: 111.53015 },
+        center: myLatLong,
         zoom: 6,
         mapTypeId: 'hybrid',
       });
@@ -74,7 +81,7 @@ const Overview: React.FC = () => {
         geocodeLatLng(geocoder, map, mapMarker, infowindow);
       })
       // Fetch geojson from github gist
-      fetch('https://gist.githubusercontent.com/kennybop/d1716a6ccd16cf464f001a0cdd3532d6/raw/561fda40328b5a660c3faea2b58df583aee2f0a0/btg.geojson')
+      fetch(project['gist-link'])
       .then(data => {
         // Parse the json in the response data
         const res = data.json();
